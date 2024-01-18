@@ -2,17 +2,19 @@
 const express = require('express')
 const app = express()
 
-const persons = [
+app.use(express.json())
+
+let persons = [
   { 
-    'id': 1,
+    'id': 3451,
     'name': 'Arto Hellas', 
     'number': '040-123456'
   },
   { 
-    'id': 2,
+    'id': 3442,
     'name': 'Ada Lovelace', 
     'number': '39-44-5323523'
-  },
+  }/*,
   { 
     'id': 3,
     'name': 'Dan Abramov', 
@@ -22,7 +24,7 @@ const persons = [
     'id': 4,
     'name': 'Mary Poppendieck',
     'number': '39-23-6423122'
-  }
+  }*/
 ]   
 
 // API
@@ -43,13 +45,26 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const person = persons.find((p) => p.id == req.params.id)
-
-  if (person) {
+  const id = parseInt(req.params.id)
+  // check if exists and find index if so
+  const index = persons.findIndex((p) => p.id === id)
+  console.log(typeof(id))
+  if (index !== -1) {
+    persons.splice(index, 1)
     res.status(204).end()
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons/', (req, res) => {
+  // assign new id
+  const id = Math.floor(Math.random() * 9999)
+  const person = req.body
+  person.id = id
+
+  persons = persons.concat(person)
+  res.json(person)
 })
 
 // APP
