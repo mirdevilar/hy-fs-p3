@@ -51,16 +51,27 @@ app.delete('/api/persons/:id', (req, res) => {
   console.log(typeof(id))
   if (index !== -1) {
     persons.splice(index, 1)
-    res.status(204).end()
+    res.status(400).end()
   } else {
     res.status(404).end()
   }
 })
 
 app.post('/api/persons/', (req, res) => {
-  // assign new id
-  const id = Math.floor(Math.random() * 9999)
   const person = req.body
+
+  // Error handling
+  if (!person.name || !person.name) {
+    res.status(400)
+    return res.send({ error: 'properties missing' })
+  }
+  if (persons.some((p) => p.name === person.name)) {
+    console.log('exists')
+    res.status(400)
+    return res.send({ error: 'name must be unique' })
+  }
+
+  const id = Math.floor(Math.random() * 9999) // assign new id
   person.id = id
 
   persons = persons.concat(person)
