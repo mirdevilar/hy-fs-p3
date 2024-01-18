@@ -1,7 +1,9 @@
-// eslint-disable-next-line no-undef
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
 
+app.use(morgan('tiny'))
 app.use(express.json())
 
 let persons = [
@@ -14,17 +16,17 @@ let persons = [
     'id': 3442,
     'name': 'Ada Lovelace', 
     'number': '39-44-5323523'
-  }/*,
+  },
   { 
-    'id': 3,
+    'id': 3432,
     'name': 'Dan Abramov', 
     'number': '12-43-234345'
   },
   { 
-    'id': 4,
+    'id': 4234,
     'name': 'Mary Poppendieck',
     'number': '39-23-6423122'
-  }*/
+  }
 ]   
 
 // API
