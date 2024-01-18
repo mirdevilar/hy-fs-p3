@@ -25,9 +25,24 @@ const persons = [
   }
 ]   
 
-app.get('/api/persons', (request, response) => {
-  response.json(persons)
+// API
+
+app.get('/api/persons', (req, res) => {
+  res.json(persons)
 })
+
+app.get('/api/persons/:id', (req, res) => {
+  const person = persons.find((p) => p.id == req.params.id)
+
+  if (person) {
+    res.json(person)
+  } else {
+    res.status(404).end()
+  }
+  
+})
+
+// APP
 
 app.get('/info', (req, res) => {
   const date = new Date().toString()
