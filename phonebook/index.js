@@ -42,6 +42,16 @@ app.get('/api/persons/:id', (req, res) => {
   
 })
 
+app.delete('/api/persons/:id', (req, res) => {
+  const person = persons.find((p) => p.id == req.params.id)
+
+  if (person) {
+    res.status(204).end()
+  } else {
+    res.status(404).end()
+  }
+})
+
 // APP
 
 app.get('/info', (req, res) => {

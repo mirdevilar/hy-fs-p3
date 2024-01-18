@@ -1,0 +1,5 @@
+// delete existing
+DELETE http://localhost:3001/api/persons/2
+
+// delete non existent
+DELETE http://localhost:3001/api/persons/5
