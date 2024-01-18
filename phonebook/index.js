@@ -2,8 +2,6 @@
 const express = require('express')
 const app = express()
 
-const baseUrl = '/api/persons/'
-
 const persons = [
   { 
     'id': 1,
@@ -25,10 +23,18 @@ const persons = [
     'name': 'Mary Poppendieck',
     'number': '39-23-6423122'
   }
-]
+]   
 
-app.get(baseUrl, (request, response) => {
+app.get('/api/persons', (request, response) => {
   response.json(persons)
+})
+
+app.get('/info', (req, res) => {
+  const date = new Date().toString()
+  const info = `<p>Phonebook has info for ${persons.length} people.</p>`
+    + `<p>${date}</p>`
+  
+  res.send(info)
 })
 
 const PORT = 3001
