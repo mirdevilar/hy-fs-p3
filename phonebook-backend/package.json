@@ -1,0 +1,32 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "\u001b[3~",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirdevilar/hy-fs-p3.git"
+  },
+  "author": "alekarhis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mirdevilar/hy-fs-p3/issues"
+  },
+  "homepage": "https://github.com/mirdevilar/hy-fs-p3#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^3.0.3"
+  }
+}
