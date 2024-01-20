@@ -75,9 +75,6 @@ module.exports = {
         "error",
         "always"
     ],
-    "prefer-template": [
-        "error"
-    ],
     "max-len": [
         "warn",{ "code": 120 }
     ],
@@ -100,6 +97,7 @@ module.exports = {
     "react/prop-types": 0,
     "react/button-has-type": 0,
     "radix": 0,
+    "prefer-template": 0,
     // DEV
     "no-console": 0,
     "no-alert": 0,

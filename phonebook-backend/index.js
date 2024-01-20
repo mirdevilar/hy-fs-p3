@@ -38,7 +38,8 @@ app.get('/api/persons', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-  const person = persons.find((p) => p.id === req.params.id);
+  const id = parseInt(req.params.id);
+  const person = persons.find((p) => p.id === id);
 
   if (person) {
     res.json(person);
@@ -83,11 +84,17 @@ app.post('/api/persons/', (req, res) => {
 
 app.get('/info', (req, res) => {
   const date = new Date().toString();
-  const info = `<p>Phonebook has info for ${persons.length} people.</p>`
-    + `<p>${date}</p>`;
+  const info = `<p>Phonebook has info for ${persons.length} people. </p>`
+    + `<p>${date}</p>`
+    + '<a href="/api/persons/">Access persons api</a>';
 
   res.send(info);
 });
 
-const PORT = 3001;
+app.get('/', (req, res) => {
+  res.status(302);
+  res.set('Location', '/info').end();
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
