@@ -98,6 +98,7 @@ module.exports = {
     "react/button-has-type": 0,
     "radix": 0,
     "prefer-template": 0,
+    "import/no-extraneous-dependencies": 0,
     // DEV
     "no-console": 0,
     "no-alert": 0,
