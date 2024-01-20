@@ -92,10 +92,5 @@ app.get('/info', (req, res) => {
   res.send(info);
 });
 
-app.get('/', (req, res) => {
-  res.status(302);
-  res.set('Location', '/info').end();
-});
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
