@@ -34,7 +34,6 @@ app.use(express.json());
 // API
 
 app.get('/api/persons', (req, res) => {
-  console.log('poop');
   res.json(persons);
 });
 
@@ -69,7 +68,6 @@ app.post('/api/persons/', (req, res) => {
     return res.send({ error: 'properties missing' });
   }
   if (persons.some((p) => p.name === person.name)) {
-    console.log('exists');
     res.status(400);
     return res.send({ error: 'name must be unique' });
   }
@@ -90,8 +88,6 @@ app.get('/info', (req, res) => {
 
   res.send(info);
 });
-
-//app.use()
 
 const PORT = 3001;
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
