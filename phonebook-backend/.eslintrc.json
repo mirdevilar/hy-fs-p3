@@ -68,7 +68,7 @@
             "error"
         ],
         "max-len": [
-            "warn",{ "code": 100 }
+            "warn",{ "code": 130 }
         ],
         "eqeqeq": "error",
         "no-trailing-spaces": "error",
