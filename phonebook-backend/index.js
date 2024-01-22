@@ -20,28 +20,7 @@ const Person = mongoose.model('Person', personSchema);
 mongoose.set('strictQuery', false);
 mongoose.connect(MONGODB_URI);*/
 
-/*const persons = [
-  {
-    name: 'Arto Hellas',
-    number: '040-123456',
-    id: 3451
-  },
-  {
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-    id: 3442
-  },
-  {
-    name: 'Dan Abramov',
-    number: '12-43-234345',
-    id: 3432
-  },
-  {
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-    id: 4234
-  }
-];*/
+let persons = [];
 
 app.use(cors());
 app.use(morgan('tiny'));
@@ -51,8 +30,8 @@ app.use(express.json());
 // API
 
 app.get('/api/persons', (req, res) => {
-  Person.find({}).then((persons) => {
-    res.json(persons);
+  Person.find({}).then((r) => {
+    res.json(r);
   });
 });
 
@@ -77,10 +56,10 @@ app.delete('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end();
   }
-});
+});*/
 
 app.post('/api/persons/', (req, res) => {
-  const person = req.body;
+  const person = new Person(req.body);
 
   // Error handling
   if (!person.name || !person.name) {
@@ -95,13 +74,16 @@ app.post('/api/persons/', (req, res) => {
   const id = Math.floor(Math.random() * 9999); // assign new id
   person.id = id;
 
-  persons = persons.concat(person);
+  person.save().then(
+    persons = persons.concat(person)
+  );
+
   res.json(person);
 });
 
 // APP
 
-app.get('/info', (req, res) => {
+/*app.get('/info', (req, res) => {
   const date = new Date().toString();
   const info = `<p>Phonebook has info for ${persons.length} people. </p>`
     + `<p>${date}</p>`
