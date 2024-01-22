@@ -13,12 +13,12 @@ if (args.length < 3) {
 const passwd = args[2];
 const url = `mongodb+srv://alekarhis:${passwd}@phonebook.hsuikx4.mongodb.net/phonebookApp?retryWrites=true&w=majority`;
 
-const personsSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String,
 });
 
-const Person = mongoose.model('Person', personsSchema);
+const Person = mongoose.model('Person', personSchema);
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);

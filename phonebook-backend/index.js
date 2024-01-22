@@ -1,10 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const Person = require('./models/person');
+
+//const { MONGODB_URI } = process.env;
 
 const app = express();
 
-let persons = [
+/*const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+});
+
+personSchema.set('toJSON', { versionKey: false, flattenObjectIds: true });
+
+const Person = mongoose.model('Person', personSchema);
+
+mongoose.set('strictQuery', false);
+mongoose.connect(MONGODB_URI);*/
+
+/*const persons = [
   {
     name: 'Arto Hellas',
     number: '040-123456',
@@ -25,7 +41,7 @@ let persons = [
     number: '39-23-6423122',
     id: 4234
   }
-];
+];*/
 
 app.use(cors());
 app.use(morgan('tiny'));
@@ -35,10 +51,12 @@ app.use(express.json());
 // API
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Person.find({}).then((persons) => {
+    res.json(persons);
+  });
 });
 
-app.get('/api/persons/:id', (req, res) => {
+/*app.get('/api/persons/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const person = persons.find((p) => p.id === id);
 
@@ -90,7 +108,7 @@ app.get('/info', (req, res) => {
     + '<a href="/api/persons/">Access persons api</a>';
 
   res.send(info);
-});
+});*/
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
