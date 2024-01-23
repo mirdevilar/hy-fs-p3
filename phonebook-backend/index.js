@@ -51,16 +51,6 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch((err) => { next(err) })
 })
 
-app.delete('/api/persons/:id', (req, res, next) => {
-  const { id } = req.params
-
-  Person.findByIdAndDelete(id)
-    .then(() => {
-      res.status(204).end()
-    })
-    .catch((err) => { next(err) })
-})
-
 app.post('/api/persons/', (req, res, next) => {
   const person = new Person(req.body)
 
@@ -70,9 +60,28 @@ app.post('/api/persons/', (req, res, next) => {
   }
 
   person.save()
-    .then(() => {
+    .then((r) => {
       //persons = persons.concat(person)
-      res.json(person)
+      res.status(201)
+        .location(`/api/persons/${r.id}`)
+        .json(r)
+    })
+    .catch((err) => { next(err) })
+})
+
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.status(204).end()
+    })
+    .catch((err) => { next(err) })
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then((r) => {
+      res.status(200)
+        .json(r)
     })
     .catch((err) => { next(err) })
 })

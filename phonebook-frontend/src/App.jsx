@@ -22,7 +22,6 @@ const App = () => {
     personsService.getAll()
       .then((data) => {
         setPersons(data);
-        console.log(data);
       });
   }, []);
 
@@ -73,13 +72,13 @@ const App = () => {
           );
           clearForm();
         });
-    } else if (
-      window.confirm(`${newName} is already in your phonebook! Would you like to update their number?`)
-    ) {
-      personsService.update(existing.id, newNumber)
-        .then((number) => {
+    } else if (window.confirm(`${newName} is already in your phonebook! Would you like to update their number?`)) {
+      const updatedPerson = { ...existing, number: newNumber };
+
+      personsService.update(updatedPerson)
+        .then(() => {
           const updatedPersons = persons.map((p) => (
-            p.id !== existing.id ? p : { ...p, number }
+            p.id === updatedPerson.id ? updatedPerson : p
           ));
           setPersons(updatedPersons);
 

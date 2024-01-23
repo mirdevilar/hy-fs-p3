@@ -14,9 +14,9 @@ const add = (data) => (
 
 const remove = (id) => axios.delete(baseUrl + id);
 
-const update = (id, number) => (
-  axios.patch(baseUrl + id, { number })
-    .then((r) => r.data.number)
+const update = (data) => (
+  axios.put(baseUrl + data.id, data)
+    .then((r) => r.data)
 );
 
 export default { getAll, add, remove, update };
