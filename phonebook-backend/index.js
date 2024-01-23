@@ -38,9 +38,7 @@ app.get('/api/persons', (req, res, next) => {
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
-  const { id } = req.params
-
-  Person.findById(id)
+  Person.findById(req.params.id)
     .then((r) => {
       if (r) {
         res.json(r)
@@ -86,14 +84,16 @@ app.put('/api/persons/:id', (req, res, next) => {
     .catch((err) => { next(err) })
 })
 
-/*app.get('/info', (req, res) => {
-  const date = new Date().toString()
-  const info = `<p>Phonebook has info for ${persons.length} people. </p>`
-    + `<p>${date}</p>`
-    + '<a href="/api/persons/">Access persons api</a>'
+app.get('/info', (req, res) => {
+  Person.find({}).then((r) => {
+    const date = new Date().toString()
+    const info = `<p>Phonebook has info for ${r.length} people. </p>`
+      + `<p>${date}</p>`
+      + '<a href="/api/persons/">Access persons api</a>'
 
-  res.send(info)
-})*/
+    res.send(info)
+  })
+})
 
 app.use(handleUnknownEndpoint)
 app.use(handleError)
