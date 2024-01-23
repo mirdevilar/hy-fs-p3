@@ -86,6 +86,7 @@ module.exports = {
     "arrow-spacing": [
         "error", { "before": true, "after": true }
     ],
+    "semi": ["error", "never"],
 
     // OVERRIDE AIRBNB
 

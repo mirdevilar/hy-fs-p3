@@ -12,9 +12,12 @@ const handleUnknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' })
 }
 
-const handleError = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   if (err.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
+  }
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message })
   }
 
   next(err)
@@ -52,11 +55,6 @@ app.get('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons/', (req, res, next) => {
   const person = new Person(req.body)
 
-  // Error handling
-  if (!person.name || !person.number) {
-    return res.status(400).send({ error: 'properties missing' })
-  }
-
   person.save()
     .then((r) => {
       //persons = persons.concat(person)
@@ -76,7 +74,11 @@ app.delete('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Person.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then((r) => {
       res.status(200)
         .json(r)
@@ -96,7 +98,7 @@ app.get('/info', (req, res) => {
 })
 
 app.use(handleUnknownEndpoint)
-app.use(handleError)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => { console.log(`Server running on port ${PORT}`) })
