@@ -58,6 +58,14 @@ const App = () => {
     const existing = persons.find((p) => p.name === newName);
 
     if (!existing) {
+      if (!newName || !newNumber) {
+        showNotification(
+          'Fields cannot be empty',
+          'error'
+        );
+        return;
+      }
+
       const person = {
         name: newName,
         number: newNumber,

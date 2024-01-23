@@ -54,7 +54,7 @@ app.post('/api/persons/', (req, res, next) => {
 
   // Error handling
   if (!person.name || !person.number) {
-    res.status(400).send({ error: 'properties missing' }).end()
+    return res.status(400).send({ error: 'properties missing' })
   }
 
   person.save()
