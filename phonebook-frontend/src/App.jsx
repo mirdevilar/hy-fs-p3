@@ -20,7 +20,10 @@ const App = () => {
 
   useEffect(() => {
     personsService.getAll()
-      .then((data) => setPersons(data));
+      .then((data) => {
+        setPersons(data);
+        console.log(data);
+      });
   }, []);
 
   // UTILS
@@ -96,7 +99,7 @@ const App = () => {
   };
 
   const handleRemove = (e) => {
-    const idToRemove = parseInt(e.target.id);
+    const idToRemove = e.target.id;
     const person = persons.find((p) => p.id === idToRemove);
     if (window.confirm(`Delete ${person.name}?`)) {
       personsService.remove(idToRemove)

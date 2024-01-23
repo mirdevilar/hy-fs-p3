@@ -1,96 +1,93 @@
-require('dotenv').config();
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
-const Person = require('./models/person');
+require('dotenv').config()
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors')
+const Person = require('./models/person')
 
-//const { MONGODB_URI } = process.env;
+const app = express()
 
-const app = express();
+// ERROR HANDLERS
 
-/*const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-});
+const handleUnknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
 
-personSchema.set('toJSON', { versionKey: false, flattenObjectIds: true });
-
-const Person = mongoose.model('Person', personSchema);
-
-mongoose.set('strictQuery', false);
-mongoose.connect(MONGODB_URI);*/
-
-let persons = [];
-
-app.use(cors());
-app.use(morgan('tiny'));
-app.use(express.static('dist'));
-app.use(express.json());
-
-// API
-
-app.get('/api/persons', (req, res) => {
-  Person.find({}).then((r) => {
-    res.json(r);
-  });
-});
-
-/*app.get('/api/persons/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const person = persons.find((p) => p.id === id);
-
-  if (person) {
-    res.json(person);
-  } else {
-    res.status(404).end();
+const handleError = (err, req, res, next) => {
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
   }
-});
 
-app.delete('/api/persons/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  // check if exists and find index if so
-  const index = persons.findIndex((p) => p.id === id);
-  if (index !== -1) {
-    persons.splice(index, 1);
-    res.status(200).end();
-  } else {
-    res.status(404).end();
-  }
-});*/
+  next(err)
+}
 
-app.post('/api/persons/', (req, res) => {
-  const person = new Person(req.body);
+// MIDDLEWARE
+
+app.use(cors())
+app.use(express.static('dist'))
+app.use(express.json())
+app.use(morgan('tiny'))
+
+// REST API ROUTES
+
+app.get('/api/persons', (req, res, next) => {
+  Person.find({})
+    .then((r) => {
+      res.json(r)
+    })
+    .catch((err) => { next(err) })
+})
+
+app.get('/api/persons/:id', (req, res, next) => {
+  const { id } = req.params
+
+  Person.findById(id)
+    .then((r) => {
+      if (r) {
+        res.json(r)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch((err) => { next(err) })
+})
+
+app.delete('/api/persons/:id', (req, res, next) => {
+  const { id } = req.params
+
+  Person.findByIdAndDelete(id)
+    .then(() => {
+      res.status(204).end()
+    })
+    .catch((err) => { next(err) })
+})
+
+app.post('/api/persons/', (req, res, next) => {
+  const person = new Person(req.body)
 
   // Error handling
-  if (!person.name || !person.name) {
-    res.status(400);
-    return res.send({ error: 'properties missing' });
-  }
-  if (persons.some((p) => p.name === person.name)) {
-    res.status(400);
-    return res.send({ error: 'name must be unique' });
+  if (!person.name || !person.number) {
+    res.status(400).send({ error: 'properties missing' }).end()
   }
 
-  const id = Math.floor(Math.random() * 9999); // assign new id
-  person.id = id;
-
-  person.save().then(
-    persons = persons.concat(person)
-  );
-
-  res.json(person);
-});
-
-// APP
+  person.save()
+    .then(() => {
+      //persons = persons.concat(person)
+      res.json(person)
+    })
+    .catch((err) => { next(err) })
+})
 
 /*app.get('/info', (req, res) => {
-  const date = new Date().toString();
+  const date = new Date().toString()
   const info = `<p>Phonebook has info for ${persons.length} people. </p>`
     + `<p>${date}</p>`
-    + '<a href="/api/persons/">Access persons api</a>';
+    + '<a href="/api/persons/">Access persons api</a>'
 
-  res.send(info);
-});*/
+  res.send(info)
+})*/
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => { console.log(`Server running on port ${PORT}`); });
+app.use(handleUnknownEndpoint)
+app.use(handleError)
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => { console.log(`Server running on port ${PORT}`) })
